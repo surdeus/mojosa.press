@@ -8,16 +8,14 @@ import(
 
 var(
 	Templates *template.Template = template.Must(
-		template.ParseGlob(
-			path.Tmpl+"/*"
-		)
-	)
+		template.ParseGlob(path.Tmpl+"/*" ))
 )
 
 func
-WriteTemplate(w http.ResponseWrite, tmpl string, p *post.Post){
-	e := Templates.ExecuteTemplate(w, tmpl, p)
+WriteTemplate(w http.ResponseWriter, tmpl string, v interface{} ){
+	e := Templates.ExecuteTemplate(w, tmpl, v)
 	if e != nil {
-		http.Error(w, e.Error(), http.StatusInternal)
+		http.Error(w, e.Error(),
+			http.StatusInternalServerError)
 	}
 }

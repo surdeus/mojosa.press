@@ -19,5 +19,6 @@ main(){
 		http.StripPrefix(
 			"/s/",
 			fs) )
+	http.HandleFunc("/p/", hndl.ReadPost)
 	log.Fatal(http.ListenAndServe(AddrStr, nil))
 }

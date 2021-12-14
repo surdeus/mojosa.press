@@ -1,0 +1,5 @@
+{{define "content"}}
+	This is root
+{{end}}
+
+{{template "master"}}
