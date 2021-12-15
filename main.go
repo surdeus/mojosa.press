@@ -5,7 +5,7 @@ import(
 	"net/http"
 	"mojosa/press/m/hndl"
 	"mojosa/press/m/path"
-	"mojosa/press/m/uri"
+	"mojosa/press/m/urlpath"
 )
 
 var(
@@ -14,16 +14,17 @@ var(
 
 func
 main(){
-	http.HandleFunc("/", hndl.Root)
+
 	fs := http.FileServer(http.Dir(path.Static))
-	http.Handle(uri.StaticPrefix,
+	http.Handle(urlpath.StaticPrefix,
 		http.StripPrefix(
-			uri.StaticPrefix,
+			urlpath.StaticPrefix,
 			fs) )
 
-	http.HandleFunc(uri.ViewPostPrefix, hndl.ViewPost)
-	//http.Handle(uri.ViewPostPrefix, http.StripPrefix(
-	//	uri.ViewPostPrefix, hndl.ViewPost) )
+	for _, v := range hndl.Defs {
+		http.HandleFunc(v.Pref,
+			hndl.MakeHttpHandleFunc(v.Pref, v.Re, v.Fn))
+	}
 
 	log.Fatal(http.ListenAndServe(AddrStr, nil))
 }
