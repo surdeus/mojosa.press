@@ -4,9 +4,10 @@ import(
 	"net/http"
 	"net/url"
 	"regexp"
+	"strconv"
 	"mojosa/press/m/render"
 	"mojosa/press/m/urlpath"
-	//"mojosa/press/m/post"
+	"mojosa/press/m/post"
 	"fmt"
 )
 
@@ -14,13 +15,14 @@ type Handler func(http.ResponseWriter, *http.Request, url.Values, string)
 type FuncDefine struct {
 	Pref string
 	Re *regexp.Regexp
-	Fn Handler	
+	Fn Handler
 }
 
 var(
+	ValidViewPost = regexp.MustCompile("^[0-9]+$")
 	Defs = []FuncDefine {
 		{urlpath.RootPrefix, nil, Root},
-		{urlpath.ViewPostPrefix, nil, ViewPost},
+		{urlpath.ViewPostPrefix, ValidViewPost, ViewPost},
 		{urlpath.TestPrefix, nil, Test},
 	}
 )
@@ -30,8 +32,9 @@ func
 MakeHttpHandleFunc(pref string, re *regexp.Regexp, fn Handler) http.HandlerFunc {
 return func(w http.ResponseWriter, r *http.Request) {
 	p := r.URL.Path[len(pref):]
-	if urlpath.ValidifyPath(p, re) != true {
+	if !urlpath.Validify(p, re) {
 		http.NotFound(w, r)
+		return
 	}
 	q, e := url.ParseQuery(r.URL.RawQuery)
 
@@ -46,9 +49,15 @@ Root(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 	render.WriteTemplate(w, "root", nil)
 }
 	
-
 func
 ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
+	id, _ := strconv.Atoi(p)
+	pst, err := post.GetById(id)
+	if err != nil {
+		http.NotFound(w, r)
+		return
+	}
+	fmt.Fprintf(w, "Username: '%s', Content:'%s'\n", pst.Username, pst.Content)
 }
 
 func

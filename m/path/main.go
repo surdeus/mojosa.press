@@ -1,5 +1,9 @@
 package path
 
+import(
+	"strconv"
+)
+
 var(
 	Data = "dat"
 	Tmpl = Data+"/tmpl"
@@ -13,5 +17,5 @@ var(
 
 func
 PostById(id int) string {
-	return Post+"/"+string(id)
+	return Post+"/"+strconv.Itoa(id)
 }

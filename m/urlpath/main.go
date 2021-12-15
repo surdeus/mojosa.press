@@ -12,7 +12,16 @@ var(
 )
 
 func
-ValidifyPath(u string, re *regexp.Regexp) bool {
+Validify(u string, re *regexp.Regexp) bool {
+	if re == nil {
+		return true
+	}
+	
+	ret := re.Find([]byte(u))
+	if ret == nil {
+		return false
+	}
+
 	return true
 }
 

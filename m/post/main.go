@@ -22,6 +22,7 @@ init(){
 	buf, err := ioutil.ReadFile(path.LastPostIdFile)
 	if err != nil {
 		ioutil.WriteFile(path.LastPostIdFile, []byte("0"), 0755)
+		buf = []byte("0")
 	}
 
 	lastId, err = strconv.Atoi(string(buf))
@@ -31,7 +32,7 @@ init(){
 }
 
 func
-ById(id int) (Post, error) {
+GetById(id int) (Post, error) {
 	var p Post
 
 	buf, err := ioutil.ReadFile(path.PostById(id))
