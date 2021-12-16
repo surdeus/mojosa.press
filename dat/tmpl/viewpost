@@ -1,0 +1,12 @@
+
+{{define "title"}}
+	The title - 
+	{{.Title}}
+{{end}}
+
+{{define "content"}}
+	The content
+	{{.Content}}
+{{end}}
+
+{{template "master" .}}

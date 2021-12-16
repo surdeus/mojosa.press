@@ -9,8 +9,8 @@ import(
 )
 
 type Post struct {
-	Username string
 	Content string
+	Title string
 }
 
 var(

@@ -57,7 +57,8 @@ ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 		http.NotFound(w, r)
 		return
 	}
-	fmt.Fprintf(w, "Username: '%s', Content:'%s'\n", pst.Username, pst.Content)
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	render.WriteTemplate(w, "viewpost", pst)
 }
 
 func

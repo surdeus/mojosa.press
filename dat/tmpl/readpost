@@ -1,4 +1,0 @@
-{{define "title"}}Checking templates{{end}}
-{{define "content"}}
-	This must work, not dynamically though.
-{{end}}
