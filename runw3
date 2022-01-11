@@ -1,0 +1,7 @@
+#!/bin/sh
+
+while true ; do
+	goblin ls -r 100 cmd dat/tmpl m \
+		| entr -d -r rc -c 'mk && ./exe/w3site'
+done
+

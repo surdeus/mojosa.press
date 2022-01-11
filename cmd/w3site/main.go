@@ -1,6 +1,7 @@
 package main
 
 import(
+	"os"
 	"log"
 	"net/http"
 	"mojosa/press/m/hndl"
@@ -26,5 +27,6 @@ main(){
 			hndl.MakeHttpHandleFunc(v.Pref, v.Re, v.Fn))
 	}
 
+	log.Printf("%s: Running on %s\n", os.Args[0], AddrStr)
 	log.Fatal(http.ListenAndServe(AddrStr, nil))
 }
