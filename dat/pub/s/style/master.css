@@ -1,0 +1,15 @@
+html {
+	background-color : black ;
+}
+
+body {
+	background-color : white ;
+}
+
+article {
+	background-color : green ;
+	min-height : 90% ;
+}
+
+footer {
+}

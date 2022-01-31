@@ -5,8 +5,9 @@
 {{end}}
 
 {{define "content"}}
-	The content
-	{{.Content}}
+  <article>
+    {{.Content}}
+  </article>
 {{end}}
 
 {{template "master" .}}
