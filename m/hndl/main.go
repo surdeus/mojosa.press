@@ -1,6 +1,7 @@
 package hndl
 
 import(
+	"html/template"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -8,6 +9,8 @@ import(
 	"mojosa/press/m/render"
 	"mojosa/press/m/urlpath"
 	"mojosa/press/m/post"
+	"mojosa/press/m/sanitize"
+	"mojosa/press/m/md"
 	"fmt"
 )
 
@@ -57,7 +60,12 @@ ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 		http.NotFound(w, r)
 		return
 	}
+
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	buf := md.Process([]byte(pst.Content))
+	pst.Content = template.HTML(sanitize.Sanitize(buf))
+
 	render.WriteTemplate(w, "viewpost", pst)
 }
 

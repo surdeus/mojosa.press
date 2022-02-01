@@ -6,10 +6,11 @@ import(
 	"strconv"
 	"encoding/json"
 	"mojosa/press/m/path"
+	"html/template"
 )
 
 type Post struct {
-	Content string
+	Content template.HTML
 	Title string
 }
 

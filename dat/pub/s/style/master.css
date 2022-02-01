@@ -1,14 +1,16 @@
 html {
 	background-color : black ;
+	height : 100% ;
 }
 
 body {
 	background-color : white ;
+	height: 100% ;
 }
 
 article {
 	background-color : green ;
-	min-height : 90% ;
+	min-height: 90% ;
 }
 
 footer {
