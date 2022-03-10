@@ -8,6 +8,7 @@ var(
 	RootPrefix = "/"
 	StaticPrefix = RootPrefix+"s/"
 	ViewPostPrefix = RootPrefix+"vp/"
+	TypePostPrefix = RootPrefix+"tp/"
 	TestPrefix = RootPrefix+"test/"
 )
 

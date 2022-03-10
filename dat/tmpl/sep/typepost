@@ -1,0 +1,10 @@
+{{define "title"}}
+	no
+{{end}}
+
+{{define "content"}}
+{{template "posttextbox" .}}
+{{end}}
+
+{{template "master" . }}
+

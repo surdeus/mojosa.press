@@ -6,11 +6,11 @@ import(
 	"net/url"
 	"regexp"
 	"strconv"
-	"mojosa/press/m/render"
 	"mojosa/press/m/urlpath"
 	"mojosa/press/m/post"
 	"mojosa/press/m/sanitize"
 	"mojosa/press/m/md"
+	"mojosa/press/m/tmpl"
 	"fmt"
 )
 
@@ -23,9 +23,11 @@ type FuncDefine struct {
 
 var(
 	ValidViewPost = regexp.MustCompile("^[0-9]+$")
+	ValidTypePost = regexp.MustCompile("^$")
 	Defs = []FuncDefine {
 		{urlpath.RootPrefix, nil, Root},
 		{urlpath.ViewPostPrefix, ValidViewPost, ViewPost},
+		{urlpath.TypePostPrefix, ValidTypePost, TypePost},
 		{urlpath.TestPrefix, nil, Test},
 	}
 )
@@ -49,7 +51,7 @@ return func(w http.ResponseWriter, r *http.Request) {
 
 func
 Root(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
-	render.WriteTemplate(w, "root", nil)
+	tmpl.Root.ExecuteTemplate(w, "root", nil)
 }
 	
 func
@@ -66,7 +68,13 @@ ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 	buf := md.Process([]byte(pst.Content))
 	pst.Content = template.HTML(sanitize.Sanitize(buf))
 
-	render.WriteTemplate(w, "viewpost", pst)
+	tmpl.ViewPost.ExecuteTemplate(w, "viewpost", pst)
+}
+
+func
+TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	tmpl.TypePost.ExecuteTemplate(w, "typepost", nil)
 }
 
 func

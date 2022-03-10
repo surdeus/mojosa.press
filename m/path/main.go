@@ -7,6 +7,8 @@ import(
 var(
 	Data = "dat"
 	Tmpl = Data+"/tmpl"
+	TmplGen = Tmpl+"/gen"
+	TmplSep = Tmpl+"/sep"
 	Temp = Data+"/tmp"
 	Pub = Data+"/pub"
 	Static = Pub+"/s"

@@ -10,8 +10,10 @@ body {
 
 article {
 	background-color : green ;
-	min-height: 90% ;
+	min-height: 85% ;
 }
 
 footer {
+	background : red ;
 }
+
