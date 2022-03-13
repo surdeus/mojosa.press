@@ -1,4 +1,5 @@
 <form class="typepost" action="/tph" method="post">
 	<input class="title"  type="text" name="title">
-	<input class="post"  type="text" name="text">
+	<textarea class="post" name="text">
+	</textarea>
 </form>

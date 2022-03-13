@@ -1,10 +1,10 @@
 html {
-	background-color : black ;
+	background : gray ;
 	height : 100% ;
 }
 
 body {
-	background-color : gray ;
+	background-color : none ;
 	height: 100% ;
 }
 
@@ -13,7 +13,14 @@ body  > * {
 }
 
 header {
+	display : flex ;
+	flex-direction : row ;
+	align-items : left ;
 	background-color : red ;
+}
+
+header > *:not(:first-child) {
+	margin-left : 1rem ;
 }
 
 .content {
@@ -22,11 +29,12 @@ header {
 	align-items : center ;
 }
 
-.content * {
+.content > * {
 	background-color : white ;
 	color : black ;
 	max-width : 80rem ;
 	padding : 0.5rem ;
+	border-radius : 0.5rem ;
 }
 
 .content article {
@@ -37,11 +45,15 @@ footer {
 	background : blue ;
 }
 
-form.typepost input {
+form.typepost > * {
 	display: block ;
 }
 
-form.typepost input.post {
+form.typepost > *:not(:first-child) {
+	margin-top : 0.5rem ;
+}
+
+form.typepost textarea.post {
 	min-height : 25rem ;
 	min-width : 25rem ;
 }

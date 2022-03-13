@@ -5,7 +5,12 @@
 {{end}}
 
 {{define "content"}}
-	Welcome on Mojosa.Press
+	<article>
+		<p>Welcome on Mojosa.Press! </p>
+		<p>
+			The press is objective and totally neutral.
+		</p>
+	</article>
 {{end}}
 
 {{template "master" .}}
