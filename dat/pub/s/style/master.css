@@ -4,16 +4,45 @@ html {
 }
 
 body {
-	background-color : white ;
+	background-color : gray ;
 	height: 100% ;
 }
 
-article {
-	background-color : green ;
+body  > * {
+	margin-top : 0.5rem ;
+}
+
+header {
+	background-color : red ;
+}
+
+.content {
+	display : flex ;
+	flex-direction : column ;
+	align-items : center ;
+}
+
+.content * {
+	background-color : white ;
+	color : black ;
+	max-width : 80rem ;
+	padding : 0.5rem ;
+}
+
+.content article {
 	min-height: 85% ;
 }
 
 footer {
-	background : red ;
+	background : blue ;
+}
+
+form.typepost input {
+	display: block ;
+}
+
+form.typepost input.post {
+	min-height : 25rem ;
+	min-width : 25rem ;
 }
 

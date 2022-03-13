@@ -3,7 +3,7 @@
 {{end}}
 
 {{define "content"}}
-{{template "posttextbox" .}}
+{{template "post-text-box" .}}
 {{end}}
 
 {{template "master" . }}

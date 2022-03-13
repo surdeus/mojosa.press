@@ -7,7 +7,9 @@
   <header>
     {{template "header" .}}
   </header>
-  {{template "content" .}}
+  <div class="content">
+    {{template "content" .}}
+  </div>
   <footer>
     {{template "footer" .}}
   </footer>

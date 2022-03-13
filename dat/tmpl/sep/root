@@ -1,5 +1,11 @@
-{{define "content"}}
-	This is root
+
+{{define "title"}}
+	The title - 
+	{{.Title}}
 {{end}}
 
-{{template "master"}}
+{{define "content"}}
+	Welcome on Mojosa.Press
+{{end}}
+
+{{template "master" .}}
