@@ -7,6 +7,7 @@ import(
 	"mojosa/press/m/hndl"
 	"mojosa/press/m/path"
 	"mojosa/press/m/urlpath"
+	"regexp"
 )
 
 var(
@@ -24,7 +25,7 @@ main(){
 
 	for _, v := range hndl.Defs {
 		http.HandleFunc(v.Pref,
-			hndl.MakeHttpHandleFunc(v.Pref, v.Re, v.Fn))
+			hndl.MakeHttpHandleFunc(v.Pref, regexp.MustCompile(v.Re), v.Fn))
 	}
 
 	log.Printf("%s: running on '%s'\n", os.Args[0], AddrStr)

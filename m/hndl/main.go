@@ -16,19 +16,17 @@ import(
 
 type Handler func(http.ResponseWriter, *http.Request, url.Values, string)
 type FuncDefine struct {
-	Pref string
-	Re *regexp.Regexp
+	Pref, Re string
 	Fn Handler
 }
 
 var(
-	ValidViewPost = regexp.MustCompile("^[0-9]+$")
-	ValidTypePost = regexp.MustCompile("^$")
 	Defs = []FuncDefine {
-		{urlpath.RootPrefix, nil, Root},
-		{urlpath.ViewPostPrefix, ValidViewPost, ViewPost},
-		{urlpath.TypePostPrefix, ValidTypePost, TypePost},
-		{urlpath.TestPrefix, nil, Test},
+		{urlpath.RootPrefix, "^$", Root},
+		{urlpath.ViewPostPrefix, "^[0-9]+$", ViewPost},
+		{urlpath.TypePostPrefix, "^$", TypePost},
+		{urlpath.TypePostHndlPrefix, "^$", Test},
+		{urlpath.TestPrefix, "", Test},
 	}
 )
 

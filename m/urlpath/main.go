@@ -9,6 +9,7 @@ var(
 	StaticPrefix = RootPrefix+"s/"
 	ViewPostPrefix = RootPrefix+"vp/"
 	TypePostPrefix = RootPrefix+"tp/"
+	TypePostHndlPrefix = RootPrefix+"tph/"
 	TestPrefix = RootPrefix+"test/"
 )
 
