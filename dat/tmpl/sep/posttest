@@ -2,7 +2,7 @@
 	no
 {{end}}
 
-{{define "action"}} "/tph" {{end}}
+{{define "action"}}"/test"{{end}}
 
 {{define "content"}}
 {{template "post-text-box" .}}

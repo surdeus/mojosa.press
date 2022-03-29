@@ -1,5 +1,6 @@
-<form class="typepost" action="/tph" method="post">
-	<input class="title"  type="text" name="title">
-	<textarea class="post" name="text">
-	</textarea>
+<form class="typepost" action={{template "action" .}} method="POST">
+	<input class="pass" type="password" name="pass" value="" />
+	<input class="title" type="text" name="title" value="" />
+	<input class="post" type="text" name="text" value="" />
+	<input type="submit" value="Done" />
 </form>
