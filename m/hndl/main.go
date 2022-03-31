@@ -11,6 +11,7 @@ import(
 	"mojosa/press/m/sanitize"
 	"mojosa/press/m/md"
 	"mojosa/press/m/tmpl"
+	//"io/ioutil"
 	"fmt"
 )
 
@@ -25,8 +26,9 @@ var(
 		{urlpath.RootPrefix, "^$", Root},
 		{urlpath.ViewPostPrefix, "^[0-9]+$", ViewPost},
 		{urlpath.TypePostPrefix, "^$", TypePost},
-		{urlpath.TypePostHndlPrefix, "^$", Test},
-		{urlpath.TestPrefix, "", Test},
+		{urlpath.TypePostHndlPrefix, "^$", TypePostHndl},
+		{urlpath.GetTestPrefix, "", GetTest},
+		{urlpath.PostTestPrefix, "", PostTest},
 	}
 )
 
@@ -76,7 +78,27 @@ TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 }
 
 func
-Test(w http.ResponseWriter, r *http.Request, q url.Values, p string){
+TypePostHndl(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+	//post.WriteNew()
+	http.Redirect(w, r, urlpath.RootPrefix, http.StatusFound)
+}
+
+func
+PostTest(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+	switch r.Method {
+	case "GET" :
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		tmpl.PostTest.ExecuteTemplate(w, "posttest", nil)
+	case "POST" :
+		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+		fmt.Fprintf(w, "Method: %s\n", r.Method)
+		r.ParseForm()
+		fmt.Fprintf(w, "Post data:\n%v\n", r.PostForm)
+	}
+}
+
+func
+GetTest(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprintf(w, "Path: '%s'\nRawQuery:'%s'\n", r.URL.Path, r.URL.RawQuery)
 	fmt.Fprintf(w, "p: '%s'\n", p)
@@ -87,4 +109,6 @@ Test(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 			fmt.Fprintf(w, "\t\t'%s'\n", s)
 		}
 	}
+
 }
+

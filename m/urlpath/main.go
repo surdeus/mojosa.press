@@ -10,7 +10,8 @@ var(
 	ViewPostPrefix = RootPrefix+"vp/"
 	TypePostPrefix = RootPrefix+"tp/"
 	TypePostHndlPrefix = RootPrefix+"tph/"
-	TestPrefix = RootPrefix+"test/"
+	GetTestPrefix = RootPrefix+"gettest/"
+	PostTestPrefix = RootPrefix+"posttest/"
 )
 
 func

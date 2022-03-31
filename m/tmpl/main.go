@@ -9,6 +9,7 @@ import(
 var(
 	ViewPost = MustParse("viewpost")
 	TypePost = MustParse("typepost")
+	PostTest = MustParse("posttest")
 	Root = MustParse("root")
 )
 
