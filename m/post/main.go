@@ -57,7 +57,7 @@ GetById(id int) (Post, error) {
 func
 incrementLastId() error {
 	lastId++
-	ioutil.WriteFile(path.LastPostIdFile, []byte(string(lastId)), 0644)
+	ioutil.WriteFile(path.LastPostIdFile, []byte(strconv.Itoa(lastId)), 0644)
 	return nil
 }
 
