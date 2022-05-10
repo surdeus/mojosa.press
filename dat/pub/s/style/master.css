@@ -53,7 +53,7 @@ form.typepost > *:not(:first-child) {
 	margin-top : 0.5rem ;
 }
 
-form.typepost textarea.post {
+form.typepost .post {
 	min-height : 25rem ;
 	min-width : 25rem ;
 }
