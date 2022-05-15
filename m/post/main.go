@@ -26,7 +26,7 @@ func
 init(){
 	buf, err := ioutil.ReadFile(path.LastPostIdFile)
 	if err != nil {
-		ioutil.WriteFile(path.LastPostIdFile, []byte(string(InitId)), 0644)
+		ioutil.WriteFile(path.LastPostIdFile, []byte(strconv.Itoa(InitId)), 0644)
 		buf = []byte("0")
 	}
 

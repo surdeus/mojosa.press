@@ -14,7 +14,7 @@ var(
 	Static = Pub+"/s"
 	Database = Pub+"/db"
 	Post = Pub+"/p"
-	LastPostIdFile = Temp+"/lastpost"
+	LastPostIdFile = Post+"/last"
 )
 
 func
