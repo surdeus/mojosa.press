@@ -45,7 +45,6 @@ return func(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(r.Method)
 	switch r.Method {
 	case "GET" :
 		q, e = url.ParseQuery(r.URL.RawQuery)
@@ -94,7 +93,6 @@ TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 			Title : r.Form.Get("title"),
 			Hash : hsh}
 		post.WriteNew(pst)
-		fmt.Println("yes")
 		http.Redirect(w, r, urlpath.RootPrefix, http.StatusFound)
 	}
 }
