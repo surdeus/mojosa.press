@@ -62,20 +62,20 @@ incrementLastId() error {
 }
 
 func
-WriteNew(p Post) error {
+WriteNew(p Post) (int, error) {
 	var err error
 
 	err = incrementLastId()
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	err = WriteById(p, lastId)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return lastId, nil
 }
 
 func

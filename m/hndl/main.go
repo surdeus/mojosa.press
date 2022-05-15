@@ -92,8 +92,22 @@ TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 			Content : template.HTML(r.Form.Get("text")),
 			Title : r.Form.Get("title"),
 			Hash : hsh}
-		post.WriteNew(pst)
-		http.Redirect(w, r, urlpath.RootPrefix, http.StatusFound)
+		id, _ := post.WriteNew(pst)
+		ids := strconv.Itoa(id)
+		http.Redirect(w, r,
+			urlpath.ViewPostPrefix+ids,
+			http.StatusFound)
+	}
+}
+
+func
+EditPost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+	switch r.Method {
+	case "GET" :
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		tmpl.EditPost.ExecuteTemplate(w, "editpost", nil)
+	case "POST" :
+		http.Redirect(w, r, urlpath.ViewPostPrefix+p, http.StatusFound)
 	}
 }
 
