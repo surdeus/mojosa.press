@@ -26,7 +26,6 @@ var(
 		{urlpath.RootPrefix, "^$", Root},
 		{urlpath.ViewPostPrefix, "^[0-9]+$", ViewPost},
 		{urlpath.TypePostPrefix, "^$", TypePost},
-		{urlpath.TypePostHndlPrefix, "^$", TypePostHndl},
 		{urlpath.GetTestPrefix, "", GetTest},
 		{urlpath.PostTestPrefix, "", PostTest},
 	}
@@ -36,12 +35,22 @@ var(
 func
 MakeHttpHandleFunc(pref string, re *regexp.Regexp, fn Handler) http.HandlerFunc {
 return func(w http.ResponseWriter, r *http.Request) {
+	var(
+		q url.Values
+		e error
+	)
 	p := r.URL.Path[len(pref):]
 	if !urlpath.Validify(p, re) {
 		http.NotFound(w, r)
 		return
 	}
-	q, e := url.ParseQuery(r.URL.RawQuery)
+
+	switch r.Method {
+	case "GET" :
+		q, e = url.ParseQuery(r.URL.RawQuery)
+	case "POST" :
+		r.ParseForm()
+	}
 
 	if e != nil {
 	}
@@ -73,14 +82,33 @@ ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 
 func
 TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	tmpl.TypePost.ExecuteTemplate(w, "typepost", nil)
+	switch r.Method {
+	case "GET" :
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		tmpl.TypePost.ExecuteTemplate(w, "typepost", nil)
+	case "POST" :
+		hsh, _ := post.Hash(r.Form.Get("pass"))
+		pst := post.Post{
+			Content : template.HTML(r.Form.Get("text")),
+			Title : r.Form.Get("title"),
+			Hash : hsh}
+		id, _ := post.WriteNew(pst)
+		ids := strconv.Itoa(id)
+		http.Redirect(w, r,
+			urlpath.ViewPostPrefix+ids,
+			http.StatusFound)
+	}
 }
 
 func
-TypePostHndl(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
-	//post.WriteNew()
-	http.Redirect(w, r, urlpath.RootPrefix, http.StatusFound)
+EditPost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+	switch r.Method {
+	case "GET" :
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		tmpl.EditPost.ExecuteTemplate(w, "editpost", nil)
+	case "POST" :
+		http.Redirect(w, r, urlpath.ViewPostPrefix+p, http.StatusFound)
+	}
 }
 
 func
@@ -92,7 +120,6 @@ PostTest(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 	case "POST" :
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		fmt.Fprintf(w, "Method: %s\n", r.Method)
-		r.ParseForm()
 		fmt.Fprintf(w, "Post data:\n%v\n", r.PostForm)
 	}
 }

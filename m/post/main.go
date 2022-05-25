@@ -26,7 +26,7 @@ func
 init(){
 	buf, err := ioutil.ReadFile(path.LastPostIdFile)
 	if err != nil {
-		ioutil.WriteFile(path.LastPostIdFile, []byte(string(InitId)), 0644)
+		ioutil.WriteFile(path.LastPostIdFile, []byte(strconv.Itoa(InitId)), 0644)
 		buf = []byte("0")
 	}
 
@@ -57,25 +57,25 @@ GetById(id int) (Post, error) {
 func
 incrementLastId() error {
 	lastId++
-	ioutil.WriteFile(path.LastPostIdFile, []byte(string(lastId)), 0644)
+	ioutil.WriteFile(path.LastPostIdFile, []byte(strconv.Itoa(lastId)), 0644)
 	return nil
 }
 
 func
-WriteNew(p Post) error {
+WriteNew(p Post) (int, error) {
 	var err error
 
 	err = incrementLastId()
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	err = WriteById(p, lastId)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return nil
+	return lastId, nil
 }
 
 func

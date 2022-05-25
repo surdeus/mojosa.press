@@ -2,7 +2,7 @@
 	no
 {{end}}
 
-{{define "action"}} "/tp/" {{end}}
+{{define "action"}}"/edittest/"{{end}}
 
 {{define "content"}}
 {{template "post-text-box" .}}

@@ -16,7 +16,8 @@ header {
 	display : flex ;
 	flex-direction : row ;
 	align-items : left ;
-	background-color : red ;
+	background-color : white ;
+	color : black ;
 }
 
 header > *:not(:first-child) {
@@ -42,7 +43,8 @@ header > *:not(:first-child) {
 }
 
 footer {
-	background : blue ;
+	background : white;
+	color : black ;
 }
 
 form.typepost > * {
