@@ -1,11 +1,11 @@
 {{define "title"}}
-	no
+	POST test
 {{end}}
 
 {{define "action"}}"/posttest/"{{end}}
 
 {{define "content"}}
-{{template "post-text-box" .}}
+	{{template "post-text-box" .}}
 {{end}}
 
 {{template "master" . }}

@@ -10,7 +10,6 @@ var(
 	PostTest = MustParse("posttest")
 	ViewPost = MustParse("viewpost")
 	TypePost = MustParse("typepost")
-	EditPost = MustParse("editpost")
 	Root = MustParse("root")
 )
 

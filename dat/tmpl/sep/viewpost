@@ -1,12 +1,11 @@
 
 {{define "title"}}
-	The title - 
-	{{.Title}}
+	{{.Post.Title}}
 {{end}}
 
 {{define "content"}}
   <article>
-    {{.Content}}
+    {{.HTMLContent}}
   </article>
 {{end}}
 

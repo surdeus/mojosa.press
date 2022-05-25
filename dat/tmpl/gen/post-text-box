@@ -1,6 +1,10 @@
-<form method="POST" class="typepost" action={{template "action" .}} >
-  <input class="pass" type="password" name="pass" value="" />
-  <input class="title" type="text" name="title" value="" />
-  <textarea class="post" type="text" name="text" ></textarea>
-  <input type="submit" value="Done" />
+<form method="POST" class="typepost" action="{{template "action" .}}">
+  dick
+  <input class="pass" type="password" name="pass" value="" >
+  <input class="title" type="text" name="title" value="{{if .Post.Title}}{{.Post.Title}}{{end}}" >
+  <textarea class="post" type="text" name="text" >
+    {{if .Post.Content}}{{.Post.Content}}{{end}}
+  </textarea>
+  <input type="submit" value="Done" >
 </form>
+

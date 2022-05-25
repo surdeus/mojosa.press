@@ -1,18 +1,19 @@
 package post
 
 import(
+	"os"
 	"log"
 	"io/ioutil"
 	"strconv"
 	"encoding/json"
 	"mojosa/press/m/path"
-	"html/template"
-	"fmt"
+	//"html/template"
+	//"fmt"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type Post struct {
-	Content template.HTML
+	Content string
 	Title string
 	Hash string
 }
@@ -34,7 +35,6 @@ init(){
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(lastId)
 }
 
 func
@@ -87,7 +87,7 @@ Hash(pass string) (string, error) {
 func
 CheckHash(pass, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pass))
-	return err != nil
+	return err == nil
 }
 
 func
@@ -99,7 +99,6 @@ CheckPass(pass string, id int) bool {
 	
 	return CheckHash(pass, p.Hash)
 }
-
 
 func
 WriteById(p Post, id int) error {
@@ -115,4 +114,14 @@ WriteById(p Post, id int) error {
 	}
 
 	return nil
+}
+
+func
+Exists(id int) bool {
+	_, err := os.Stat(path.PostById(id))
+	if err != nil {
+		return false
+	}
+
+	return true
 }

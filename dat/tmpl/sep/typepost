@@ -1,11 +1,13 @@
 {{define "title"}}
-	no
+	{{if .Post.Title}}
+	Edit {{.Post.Title}}
+	{{end}}
 {{end}}
 
-{{define "action"}} "/tp/" {{end}}
+{{define "action"}}/tp/{{.Id}}{{end}}
 
 {{define "content"}}
-{{template "post-text-box" .}}
+	{{template "post-text-box" .}}
 {{end}}
 
 {{template "master" . }}

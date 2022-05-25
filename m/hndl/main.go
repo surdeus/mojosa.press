@@ -24,8 +24,8 @@ type FuncDefine struct {
 var(
 	Defs = []FuncDefine {
 		{urlpath.RootPrefix, "^$", Root},
-		{urlpath.ViewPostPrefix, "^[0-9]+$", ViewPost},
-		{urlpath.TypePostPrefix, "^$", TypePost},
+		{urlpath.ViewPostPrefix, "^[0-9]*$", ViewPost},
+		{urlpath.TypePostPrefix, "^[0-9]*$", TypePost},
 		{urlpath.GetTestPrefix, "", GetTest},
 		{urlpath.PostTestPrefix, "", PostTest},
 	}
@@ -75,39 +75,62 @@ ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 	buf := md.Process([]byte(pst.Content))
-	pst.Content = template.HTML(sanitize.Sanitize(buf))
+	pst.Content = string(sanitize.Sanitize(buf))
 
-	tmpl.ViewPost.ExecuteTemplate(w, "viewpost", pst)
+	tmpl.ViewPost.ExecuteTemplate(w, "viewpost", struct{
+			Post post.Post
+			HTMLContent template.HTML
+		}{pst, template.HTML(pst.Content)})
 }
 
+/* Both edit and write new. */
 func
 TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 	switch r.Method {
 	case "GET" :
+		var pst post.Post
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		tmpl.TypePost.ExecuteTemplate(w, "typepost", nil)
+
+		if p == "" {
+			tmpl.TypePost.ExecuteTemplate(w, "typepost", struct{Post post.Post}{post.Post{}})
+			return
+		}
+
+		id, _ := strconv.Atoi(p)
+		pst, err := post.GetById(id)
+		pst.Hash = ""
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+
+		tmpl.TypePost.ExecuteTemplate(w, "typepost", struct{
+				Post post.Post
+				Id int}{pst, id})
 	case "POST" :
-		hsh, _ := post.Hash(r.Form.Get("pass"))
+		pass := r.Form.Get("pass")
+		hsh, _ := post.Hash(pass)
 		pst := post.Post{
-			Content : template.HTML(r.Form.Get("text")),
+			Content : r.Form.Get("text"),
 			Title : r.Form.Get("title"),
 			Hash : hsh}
-		id, _ := post.WriteNew(pst)
-		ids := strconv.Itoa(id)
-		http.Redirect(w, r,
-			urlpath.ViewPostPrefix+ids,
+		if p == "" { /* Creating new post if the path is empty. */
+			id, _ := post.WriteNew(pst)
+			ids := strconv.Itoa(id)
+			http.Redirect(w, r,
+				urlpath.ViewPostPrefix+ids,
+				http.StatusFound)
+		} else {
+			id, _ := strconv.Atoi(p)
+			if !post.CheckPass(pass, id) {
+				http.NotFound(w, r)
+				return
+			}
+			post.WriteById(pst, id)
+			http.Redirect(w, r,
+				urlpath.ViewPostPrefix+p,
 			http.StatusFound)
-	}
-}
-
-func
-EditPost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
-	switch r.Method {
-	case "GET" :
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		tmpl.EditPost.ExecuteTemplate(w, "editpost", nil)
-	case "POST" :
-		http.Redirect(w, r, urlpath.ViewPostPrefix+p, http.StatusFound)
+		}
 	}
 }
 
