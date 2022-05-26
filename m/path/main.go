@@ -6,14 +6,12 @@ import(
 
 var(
 	Data = "dat"
-	Tmpl = Data+"/tmpl"
+	Tmpl = "tmpl"
 	TmplGen = Tmpl+"/gen"
 	TmplSep = Tmpl+"/sep"
-	Temp = Data+"/tmp"
-	Pub = Data+"/pub"
-	Static = Pub+"/s"
-	Database = Pub+"/db"
-	Post = Pub+"/p"
+	// Temp = Data+"/tmp"
+	Static = Data+"/s"
+	Post = Data+"/p"
 	LastPostIdFile = Post+"/last"
 )
 
