@@ -4,7 +4,7 @@
 	{{end}}
 {{end}}
 
-{{define "action"}}/tp/{{.Id}}{{end}}
+{{define "action"}}/tp/{{if hasField . "Id"}}{{.Id}}{{end}}{{end}}
 
 {{define "content"}}
 	{{template "post-text-box" .}}

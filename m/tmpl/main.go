@@ -4,6 +4,8 @@ import(
 	"mojosa/press/m/path"
 	"html/template"
 	"io/ioutil"
+	"reflect"
+	//"fmt"
 )
 
 var(
@@ -22,5 +24,24 @@ MustParse(t string) *template.Template {
 		lfs = append(lfs, path.TmplGen+"/"+f.Name())
 	}
 
-	return template.Must(template.ParseFiles(lfs...))
+	tmpl, err := template.New("").
+		Funcs(template.FuncMap{
+			"hasField" : hasField,
+		}).ParseFiles(lfs...)
+	if err != nil {
+		panic(err)
+	}
+	return tmpl
+}
+
+func
+hasField(v interface{}, name string) bool {
+	rv := reflect.ValueOf(v)
+	if rv.Kind() == reflect.Ptr {
+		rv = rv.Elem()
+	}
+	if rv.Kind() != reflect.Struct {
+		return false
+	}
+	return rv.FieldByName(name).IsValid()
 }
