@@ -12,10 +12,11 @@ var(
 	// Temp = Data+"/tmp"
 	Static = Data+"/s"
 	Post = Data+"/p"
-	LastPostIdFile = Post+"/last"
+	TempConfig = Data+"/temp-config.json"
 )
 
 func
 PostById(id int) string {
 	return Post+"/"+strconv.Itoa(id)
 }
+

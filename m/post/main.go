@@ -2,39 +2,23 @@ package post
 
 import(
 	"os"
-	"log"
 	"io/ioutil"
-	"strconv"
 	"encoding/json"
 	"mojosa/press/m/path"
+	"mojosa/press/m/tempconfig"
 	//"html/template"
-	//"fmt"
+	"fmt"
 	"golang.org/x/crypto/bcrypt"
+)
+
+var(
+	TmpCfg tempconfig.TempConfig
 )
 
 type Post struct {
 	Content string
 	Title string
 	Hash string
-}
-
-var(
-	lastId int
-	InitId = 0
-)
-
-func
-init(){
-	buf, err := ioutil.ReadFile(path.LastPostIdFile)
-	if err != nil {
-		ioutil.WriteFile(path.LastPostIdFile, []byte(strconv.Itoa(InitId)), 0644)
-		buf = []byte("0")
-	}
-
-	lastId, err = strconv.Atoi(string(buf))
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func
@@ -55,27 +39,21 @@ GetById(id int) (Post, error) {
 }
 
 func
-incrementLastId() error {
-	lastId++
-	ioutil.WriteFile(path.LastPostIdFile, []byte(strconv.Itoa(lastId)), 0644)
-	return nil
-}
-
-func
 WriteNew(p Post) (int, error) {
 	var err error
 
-	err = incrementLastId()
+	err = tempconfig.IncrementLastPostId()
+	if err != nil {
+		fmt.Println("yes")
+		return 0, err
+	}
+
+	err = WriteById(p, tempconfig.LastPostId())
 	if err != nil {
 		return 0, err
 	}
 
-	err = WriteById(p, lastId)
-	if err != nil {
-		return 0, err
-	}
-
-	return lastId, nil
+	return tempconfig.LastPostId(), nil
 }
 
 func

@@ -7,6 +7,7 @@ import(
 	"mojosa/press/m/hndl"
 	"mojosa/press/m/path"
 	"mojosa/press/m/urlpath"
+	"mojosa/press/m/tempconfig"
 	"regexp"
 )
 
@@ -16,7 +17,11 @@ var(
 
 func
 main(){
-
+	var err error
+	os.Mkdir(path.Data, 0755)
+	tempconfig.TmpCfg, err = tempconfig.Read(path.TempConfig)
+	os.Mkdir(path.Post, 0755)
+	if err != nil { panic(err) }
 	fs := http.FileServer(http.Dir(path.Static))
 	http.Handle(urlpath.StaticPrefix,
 		http.StripPrefix(
