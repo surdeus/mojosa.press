@@ -5,6 +5,7 @@
 
 {{define "content"}}
   <article>
+    {{if hasField . "Id"}}[<a href=/tp/{{.Id}}>Edit</a>]{{end}}
     {{.HTMLContent}}
   </article>
 {{end}}

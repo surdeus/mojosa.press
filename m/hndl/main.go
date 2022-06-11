@@ -81,9 +81,10 @@ ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 	pst.Content = string(sanitize.Sanitize(buf))
 
 	tmpl.ViewPost.ExecuteTemplate(w, "viewpost", struct{
+			Id string
 			Post post.Post
 			HTMLContent template.HTML
-		}{pst, template.HTML(pst.Content)})
+		}{p, pst, template.HTML(pst.Content)})
 }
 
 /* Both edit and write new. */
