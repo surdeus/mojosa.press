@@ -60,7 +60,10 @@ return func(w http.ResponseWriter, r *http.Request) {
 
 func
 Root(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
-	tmpl.Root.ExecuteTemplate(w, "root", nil)
+	//tmpl.Root.ExecuteTemplate(w, "root", nil)
+	http.Redirect(w, r,
+		urlpath.ViewPostPrefix+"0",
+		http.StatusFound)
 }
 	
 func
