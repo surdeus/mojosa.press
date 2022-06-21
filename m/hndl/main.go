@@ -15,7 +15,12 @@ import(
 	"fmt"
 )
 
-type Handler func(http.ResponseWriter, *http.Request, url.Values, string)
+type FuncArg struct {
+	q url.Values
+	p string
+}
+
+type Handler func(http.ResponseWriter, *http.Request, FuncArg)
 type FuncDefine struct {
 	Pref, Re string
 	Fn Handler
@@ -36,18 +41,19 @@ func
 MakeHttpHandleFunc(pref string, re *regexp.Regexp, fn Handler) http.HandlerFunc {
 return func(w http.ResponseWriter, r *http.Request) {
 	var(
-		q url.Values
+		a FuncArg
 		e error
 	)
-	p := r.URL.Path[len(pref):]
-	if !urlpath.Validify(p, re) {
+
+	a.p = r.URL.Path[len(pref):]
+	if !urlpath.Validify(a.p, re) {
 		http.NotFound(w, r)
 		return
 	}
 
 	switch r.Method {
 	case "GET" :
-		q, e = url.ParseQuery(r.URL.RawQuery)
+		a.q, e = url.ParseQuery(r.URL.RawQuery)
 	case "POST" :
 		r.ParseForm()
 	}
@@ -55,11 +61,11 @@ return func(w http.ResponseWriter, r *http.Request) {
 	if e != nil {
 	}
 	
-	fn(w, r, q, p)
+	fn(w, r, a)
 } }
 
 func
-Root(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+Root(w http.ResponseWriter, r *http.Request, a FuncArg) {
 	//tmpl.Root.ExecuteTemplate(w, "root", nil)
 	http.Redirect(w, r,
 		urlpath.ViewPostPrefix+"0",
@@ -67,8 +73,8 @@ Root(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 }
 	
 func
-ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
-	id, _ := strconv.Atoi(p)
+ViewPost(w http.ResponseWriter, r *http.Request, a FuncArg){
+	id, _ := strconv.Atoi(a.p)
 	pst, err := post.GetById(id)
 	if err != nil {
 		http.NotFound(w, r)
@@ -84,23 +90,23 @@ ViewPost(w http.ResponseWriter, r *http.Request, q url.Values, p string){
 			Id string
 			Post post.Post
 			HTMLContent template.HTML
-		}{p, pst, template.HTML(pst.Content)})
+		}{a.p, pst, template.HTML(pst.Content)})
 }
 
 /* Both edit and write new. */
 func
-TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+TypePost(w http.ResponseWriter, r *http.Request, a FuncArg) {
 	switch r.Method {
 	case "GET" :
 		var pst post.Post
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-		if p == "" {
+		if a.p == "" {
 			tmpl.TypePost.ExecuteTemplate(w, "typepost", struct{Post post.Post}{post.Post{}})
 			return
 		}
 
-		id, _ := strconv.Atoi(p)
+		id, _ := strconv.Atoi(a.p)
 		pst, err := post.GetById(id)
 		pst.Hash = ""
 		if err != nil {
@@ -118,28 +124,28 @@ TypePost(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 			Content : r.Form.Get("text"),
 			Title : r.Form.Get("title"),
 			Hash : hsh}
-		if p == "" { /* Creating new post if the path is empty. */
+		if a.p == "" { /* Creating new post if the path is empty. */
 			id, _ := post.WriteNew(pst)
 			ids := strconv.Itoa(id)
 			http.Redirect(w, r,
 				urlpath.ViewPostPrefix+ids,
 				http.StatusFound)
 		} else {
-			id, _ := strconv.Atoi(p)
+			id, _ := strconv.Atoi(a.p)
 			if !post.CheckPass(pass, id) {
 				http.NotFound(w, r)
 				return
 			}
 			post.WriteById(pst, id)
 			http.Redirect(w, r,
-				urlpath.ViewPostPrefix+p,
+				urlpath.ViewPostPrefix+a.p,
 			http.StatusFound)
 		}
 	}
 }
 
 func
-PostTest(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
+PostTest(w http.ResponseWriter, r *http.Request, a FuncArg) {
 	switch r.Method {
 	case "GET" :
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -152,12 +158,12 @@ PostTest(w http.ResponseWriter, r *http.Request, q url.Values, p string) {
 }
 
 func
-GetTest(w http.ResponseWriter, r *http.Request, q url.Values, p string){
+GetTest(w http.ResponseWriter, r *http.Request, a FuncArg){
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprintf(w, "Path: '%s'\nRawQuery:'%s'\n", r.URL.Path, r.URL.RawQuery)
-	fmt.Fprintf(w, "p: '%s'\n", p)
-	fmt.Fprintf(w, "q:\n")
-	for k, v := range q {
+	fmt.Fprintf(w, "a.p: '%s'\n", a.p)
+	fmt.Fprintf(w, "a.q:\n")
+	for k, v := range a.q {
 		fmt.Fprintf(w, "\t'%s':\n", k)
 		for _, s := range v {
 			fmt.Fprintf(w, "\t\t'%s'\n", s)
