@@ -2,22 +2,28 @@ package main
 
 import(
 	"os"
+	"flag"
 	"log"
 	"net/http"
-	"mojosa/press/m/hndl"
-	"mojosa/press/m/path"
-	"mojosa/press/m/urlpath"
-	"mojosa/press/m/tempconfig"
+	"github.com/k1574/mojosa.press/m/hndl"
+	"github.com/k1574/mojosa.press/m/path"
+	"github.com/k1574/mojosa.press/m/urlpath"
+	"github.com/k1574/mojosa.press/m/tempconfig"
 	"regexp"
 )
 
 var(
-	AddrStr = ":8080"
 )
 
 func
 main(){
 	var err error
+	AddrStr := flag.String("a", ":8080", "Adress string")
+	flag.Parse()
+	args := flag.Args()
+	if len(args) > 0 {
+		os.Exit(1)
+	}
 	os.Mkdir(path.Data, 0755)
 	tempconfig.TmpCfg, err = tempconfig.Read(path.TempConfig)
 	os.Mkdir(path.Post, 0755)
@@ -33,6 +39,6 @@ main(){
 			hndl.MakeHttpHandleFunc(v.Pref, regexp.MustCompile(v.Re), v.Fn))
 	}
 
-	log.Printf("%s: running on '%s'\n", os.Args[0], AddrStr)
-	log.Fatal(http.ListenAndServe(AddrStr, nil))
+	log.Printf("%s: running on '%s'\n", os.Args[0], *AddrStr)
+	log.Fatal(http.ListenAndServe(*AddrStr, nil))
 }

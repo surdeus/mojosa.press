@@ -1,0 +1,18 @@
+#!/usr/bin/env rc
+
+echo $pid
+pwd = `{pwd}
+while(true){
+	goblin echo -n '> '
+	input=`{goblin read}
+	switch($input){
+	case exit
+		exit
+	case *
+	}
+	goblin ls -r 100 tmpl m dat \
+		| entr -d -r rc -c \
+		'mk && ./exe/w3site \
+		|| pkill w3site && ./exe/w3site'
+}
+

@@ -1,8 +1,0 @@
-#!/bin/sh
-
-while true ; do
-	goblin ls -r 100 tmpl m dat \
-		| entr -d -r rc -c \
-		'mk && ./exe/w3site || pkill w3site && ./exe/w3site'
-done
-

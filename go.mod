@@ -1,4 +1,4 @@
-module mojosa/press
+module github.com/k1574/mojosa.press
 
 go 1.17
 
