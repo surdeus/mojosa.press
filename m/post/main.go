@@ -18,6 +18,7 @@ var(
 type Post struct {
 	Content string
 	Title string
+	Desc string
 	Hash string
 }
 

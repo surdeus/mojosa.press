@@ -4,10 +4,14 @@
 {{end}}
 
 {{define "content"}}
-  <article>
-    {{if hasField . "Id"}}[<a href=/tp/{{.Id}}>Edit</a>]{{end}}
-    {{.HTMLContent}}
-  </article>
+  <div class="main-box">
+	  {{if hasField . "Id"}}
+		<span class="char-btn">[<a href=/tp/{{.Id}}>✐</a>]</span>
+	  {{end}}
+	  <article>
+	    {{.HTMLContent}}
+	  </article>
+  </div>
 {{end}}
 
 {{template "master" .}}
