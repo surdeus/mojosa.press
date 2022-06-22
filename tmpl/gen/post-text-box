@@ -1,8 +1,8 @@
 <form method="POST" class="typepost" action="{{template "action" .}}">
   <input class="pass" type="password" name="pass" value="" >
   <input class="title" type="text" name="title" value="{{if .Post.Title}}{{.Post.Title}}{{end}}" >
-  <textarea class="desc" type="text" name="text" >{{if .Post.Desc}}{{.Post.Desc}}{{end}}</textarea>
+  <textarea class="desc" type="text" name="desc" >{{if .Post.Desc}}{{.Post.Desc}}{{end}}</textarea>
   <textarea class="post" type="text" name="text" >{{if .Post.Content}}{{.Post.Content}}{{end}}</textarea>
-  <input type="submit" value="Done" >
+  <input class="char-btn" type="submit" value="✓" >
 </form>
 

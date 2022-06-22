@@ -123,6 +123,7 @@ TypePost(w http.ResponseWriter, r *http.Request, a FuncArg) {
 		pst := post.Post{
 			Content : r.Form.Get("text"),
 			Title : r.Form.Get("title"),
+			Desc : r.Form.Get("desc"),
 			Hash : hsh}
 		if a.p == "" { /* Creating new post if the path is empty. */
 			id, _ := post.WriteNew(pst)
