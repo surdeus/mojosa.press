@@ -13,6 +13,7 @@ var(
 	TypePostHndlPrefix = RootPrefix+"tph/"
 	GetTestPrefix = RootPrefix+"gettest/"
 	PostTestPrefix = RootPrefix+"posttest/"
+	ListPostsPrefix = RootPrefix+"lp/"
 )
 
 func

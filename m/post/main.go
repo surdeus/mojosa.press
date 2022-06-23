@@ -11,10 +11,6 @@ import(
 	"golang.org/x/crypto/bcrypt"
 )
 
-var(
-	TmpCfg tempconfig.TempConfig
-)
-
 type Post struct {
 	Content string
 	Title string
@@ -39,13 +35,18 @@ GetById(id int) (Post, error) {
 	return p, nil
 }
 
+func GetListOfPosts(id1, id2 int) ([]Post, error) {
+	if id1 > id2 || id2 > tempconfig.TmpCfg {
+		return []Post{}, errors.New("wrong indexes")
+	}
+}
+
 func
 WriteNew(p Post) (int, error) {
 	var err error
 
 	err = tempconfig.IncrementLastPostId()
 	if err != nil {
-		fmt.Println("yes")
 		return 0, err
 	}
 

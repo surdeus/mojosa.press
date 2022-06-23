@@ -15,12 +15,12 @@ import(
 	"fmt"
 )
 
-type FuncArg struct {
+type HndlArg struct {
 	q url.Values
 	p string
 }
 
-type Handler func(http.ResponseWriter, *http.Request, FuncArg)
+type Handler func(http.ResponseWriter, *http.Request, HndlArg)
 type FuncDefine struct {
 	Pref, Re string
 	Fn Handler
@@ -33,15 +33,25 @@ var(
 		{urlpath.TypePostPrefix, "^[0-9]*$", TypePost},
 		{urlpath.GetTestPrefix, "", GetTest},
 		{urlpath.PostTestPrefix, "", PostTest},
+		{urlpath.ListPostsPrefix, "^[0-9]+$", ListPosts}
 	}
 )
 
+func clamp(a, b, c int) int {
+	if b < a {
+		return a
+	}
+	if b > c {
+		return c
+	}
+	return b
+}
 
 func
 MakeHttpHandleFunc(pref string, re *regexp.Regexp, fn Handler) http.HandlerFunc {
 return func(w http.ResponseWriter, r *http.Request) {
 	var(
-		a FuncArg
+		a HndlArg
 		e error
 	)
 
@@ -65,15 +75,28 @@ return func(w http.ResponseWriter, r *http.Request) {
 } }
 
 func
-Root(w http.ResponseWriter, r *http.Request, a FuncArg) {
+Root(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	//tmpl.Root.ExecuteTemplate(w, "root", nil)
 	http.Redirect(w, r,
 		urlpath.ViewPostPrefix+"0",
 		http.StatusFound)
 }
+
+func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
+	switch(r.Method){
+	case "GET" :
+		pageId, _ := strconv.Atoi(a.p)
+		firstId := pageId*30 + 1
+		lastId := pageId*30 + 30 + 1
+
+	case "POST" :
+		http.NotFound(w, r)
+		return
+	}
+}
 	
 func
-ViewPost(w http.ResponseWriter, r *http.Request, a FuncArg){
+ViewPost(w http.ResponseWriter, r *http.Request, a HndlArg){
 	id, _ := strconv.Atoi(a.p)
 	pst, err := post.GetById(id)
 	if err != nil {
@@ -95,7 +118,7 @@ ViewPost(w http.ResponseWriter, r *http.Request, a FuncArg){
 
 /* Both edit and write new. */
 func
-TypePost(w http.ResponseWriter, r *http.Request, a FuncArg) {
+TypePost(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch r.Method {
 	case "GET" :
 		var pst post.Post
@@ -146,7 +169,7 @@ TypePost(w http.ResponseWriter, r *http.Request, a FuncArg) {
 }
 
 func
-PostTest(w http.ResponseWriter, r *http.Request, a FuncArg) {
+PostTest(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch r.Method {
 	case "GET" :
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -159,7 +182,7 @@ PostTest(w http.ResponseWriter, r *http.Request, a FuncArg) {
 }
 
 func
-GetTest(w http.ResponseWriter, r *http.Request, a FuncArg){
+GetTest(w http.ResponseWriter, r *http.Request, a HndlArg){
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprintf(w, "Path: '%s'\nRawQuery:'%s'\n", r.URL.Path, r.URL.RawQuery)
 	fmt.Fprintf(w, "a.p: '%s'\n", a.p)
@@ -172,4 +195,5 @@ GetTest(w http.ResponseWriter, r *http.Request, a FuncArg){
 	}
 
 }
+
 
