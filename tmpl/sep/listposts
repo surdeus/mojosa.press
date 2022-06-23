@@ -4,6 +4,12 @@
 {{end}}
 
 {{define "content"}}
+ {{range $i, $a := .Posts}}
+	<section class="post-entry">
+	<h2><a href="/vp/{{sum $.FirstId $i}}">{{$a.Title}}</a></h2>
+	<div class="desc">{{$a.Desc}}</div>
+	</section>
+ {{end}}
 {{end}}
 
 {{template "master" .}}

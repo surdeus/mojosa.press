@@ -6,6 +6,7 @@ import(
 	"io/ioutil"
 	"io"
 	"reflect"
+	"log"
 	//"fmt"
 )
 
@@ -14,7 +15,10 @@ var(
 )
 
 func Execute(w io.Writer, t string, v interface{}) {
-	Templates[t].ExecuteTemplate(w, t, v)
+	err := Templates[t].ExecuteTemplate(w, t, v)
+	if err != nil {
+		log.Println(err)
+	}
 }
 
 func ParseSepTemplates() map[string] *template.Template {
@@ -44,6 +48,7 @@ func MustParse(t string) *template.Template {
 	tmpl, err := template.New("").
 		Funcs(template.FuncMap{
 			"hasField" : hasField,
+			"sum" : sum,
 		}).ParseFiles(lfs...)
 	if err != nil {
 		panic(err)
@@ -62,4 +67,9 @@ hasField(v interface{}, name string) bool {
 		return false
 	}
 	return rv.FieldByName(name).IsValid()
+}
+
+func
+sum(a, b int) int {
+	return a + b
 }

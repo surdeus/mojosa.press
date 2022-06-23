@@ -48,8 +48,7 @@ func clamp(a, b, c int) int {
 	return b
 }
 
-func
-MakeHttpHandleFunc(pref string, re *regexp.Regexp, fn Handler) http.HandlerFunc {
+func MakeHttpHandleFunc(pref string, re *regexp.Regexp, fn Handler) http.HandlerFunc {
 return func(w http.ResponseWriter, r *http.Request) {
 	var(
 		a HndlArg
@@ -75,8 +74,7 @@ return func(w http.ResponseWriter, r *http.Request) {
 	fn(w, r, a)
 } }
 
-func
-Root(w http.ResponseWriter, r *http.Request, a HndlArg) {
+func Root(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	//tmpl.Root.ExecuteTemplate(w, "root", nil)
 	http.Redirect(w, r,
 		urlpath.ViewPostPrefix+"0",
@@ -93,7 +91,6 @@ func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 		lastId = clamp(0, lastId, tempconfig.TmpCfg.LastPostId)
 
 		posts, err := post.GetList(firstId, lastId)
-		fmt.Println("yes")
 		if err != nil {
 			http.NotFound(w, r)
 			return
@@ -102,15 +99,16 @@ func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 		tmpl.Execute(w, "listposts", struct{
 			Posts []post.Post
 			Page int
-			}{ posts, pageId})
+			FirstId int
+			LastId int
+			}{ posts, pageId, firstId, lastId})
 	case "POST" :
 		http.NotFound(w, r)
 		return
 	}
 }
 	
-func
-ViewPost(w http.ResponseWriter, r *http.Request, a HndlArg){
+func ViewPost(w http.ResponseWriter, r *http.Request, a HndlArg){
 	id, _ := strconv.Atoi(a.p)
 	pst, err := post.GetById(id)
 	if err != nil {
@@ -131,8 +129,7 @@ ViewPost(w http.ResponseWriter, r *http.Request, a HndlArg){
 }
 
 /* Both edit and write new. */
-func
-TypePost(w http.ResponseWriter, r *http.Request, a HndlArg) {
+func TypePost(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch r.Method {
 	case "GET" :
 		var pst post.Post
@@ -182,8 +179,7 @@ TypePost(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	}
 }
 
-func
-PostTest(w http.ResponseWriter, r *http.Request, a HndlArg) {
+func PostTest(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch r.Method {
 	case "GET" :
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
@@ -195,8 +191,7 @@ PostTest(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	}
 }
 
-func
-GetTest(w http.ResponseWriter, r *http.Request, a HndlArg){
+func GetTest(w http.ResponseWriter, r *http.Request, a HndlArg){
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	fmt.Fprintf(w, "Path: '%s'\nRawQuery:'%s'\n", r.URL.Path, r.URL.RawQuery)
 	fmt.Fprintf(w, "a.p: '%s'\n", a.p)
