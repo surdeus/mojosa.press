@@ -7,7 +7,8 @@ import(
 	"github.com/k1574/mojosa.press/m/path"
 	"github.com/k1574/mojosa.press/m/tempconfig"
 	//"html/template"
-	"fmt"
+	//"fmt"
+	"errors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -35,10 +36,18 @@ GetById(id int) (Post, error) {
 	return p, nil
 }
 
-func GetListOfPosts(id1, id2 int) ([]Post, error) {
-	if id1 > id2 || id2 > tempconfig.TmpCfg {
+func GetList(id1, id2 int) ([]Post, error) {
+	if id1 > id2 || id2 > tempconfig.TmpCfg.LastPostId {
 		return []Post{}, errors.New("wrong indexes")
 	}
+
+	ret := []Post{}
+	for i := id1 ; i <= id2 ; i++ {
+		p, _ := GetById(i)
+		ret = append(ret, p)
+	}
+
+	return ret, nil
 }
 
 func

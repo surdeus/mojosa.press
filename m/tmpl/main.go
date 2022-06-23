@@ -4,19 +4,36 @@ import(
 	"github.com/k1574/mojosa.press/m/path"
 	"html/template"
 	"io/ioutil"
+	"io"
 	"reflect"
 	//"fmt"
 )
 
 var(
-	PostTest = MustParse("posttest")
-	ViewPost = MustParse("viewpost")
-	TypePost = MustParse("typepost")
-	Root = MustParse("root")
+	Templates map[string] *template.Template
 )
 
-func
-MustParse(t string) *template.Template {
+func Execute(w io.Writer, t string, v interface{}) {
+	Templates[t].ExecuteTemplate(w, t, v)
+}
+
+func ParseSepTemplates() map[string] *template.Template {
+	ret := make(map[string] *template.Template)
+
+	files, err := ioutil.ReadDir(path.TmplSep)
+	if err != nil {
+		panic(err)
+	}
+
+	for _, f := range files {
+		ret[f.Name()] =
+			MustParse(f.Name())
+	}
+
+	return ret
+}
+
+func MustParse(t string) *template.Template {
 	lfs := []string{path.TmplSep+"/"+t}
 
 	files, _ := ioutil.ReadDir(path.TmplGen)
@@ -31,6 +48,7 @@ MustParse(t string) *template.Template {
 	if err != nil {
 		panic(err)
 	}
+
 	return tmpl
 }
 

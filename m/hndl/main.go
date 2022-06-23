@@ -11,6 +11,7 @@ import(
 	"github.com/k1574/mojosa.press/m/sanitize"
 	"github.com/k1574/mojosa.press/m/md"
 	"github.com/k1574/mojosa.press/m/tmpl"
+	"github.com/k1574/mojosa.press/m/tempconfig"
 	//"io/ioutil"
 	"fmt"
 )
@@ -33,7 +34,7 @@ var(
 		{urlpath.TypePostPrefix, "^[0-9]*$", TypePost},
 		{urlpath.GetTestPrefix, "", GetTest},
 		{urlpath.PostTestPrefix, "", PostTest},
-		{urlpath.ListPostsPrefix, "^[0-9]+$", ListPosts}
+		{urlpath.ListPostsPrefix, "^[0-9]+$", ListPosts},
 	}
 )
 
@@ -89,6 +90,19 @@ func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 		firstId := pageId*30 + 1
 		lastId := pageId*30 + 30 + 1
 
+		lastId = clamp(0, lastId, tempconfig.TmpCfg.LastPostId)
+
+		posts, err := post.GetList(firstId, lastId)
+		fmt.Println("yes")
+		if err != nil {
+			http.NotFound(w, r)
+			return
+		}
+
+		tmpl.Execute(w, "listposts", struct{
+			Posts []post.Post
+			Page int
+			}{ posts, pageId})
 	case "POST" :
 		http.NotFound(w, r)
 		return
@@ -109,7 +123,7 @@ ViewPost(w http.ResponseWriter, r *http.Request, a HndlArg){
 	buf := md.Process([]byte(pst.Content))
 	pst.Content = string(sanitize.Sanitize(buf))
 
-	tmpl.ViewPost.ExecuteTemplate(w, "viewpost", struct{
+	tmpl.Execute(w, "viewpost", struct{
 			Id string
 			Post post.Post
 			HTMLContent template.HTML
@@ -125,7 +139,7 @@ TypePost(w http.ResponseWriter, r *http.Request, a HndlArg) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 		if a.p == "" {
-			tmpl.TypePost.ExecuteTemplate(w, "typepost", struct{Post post.Post}{post.Post{}})
+			tmpl.Execute(w, "typepost", struct{Post post.Post}{post.Post{}})
 			return
 		}
 
@@ -137,7 +151,7 @@ TypePost(w http.ResponseWriter, r *http.Request, a HndlArg) {
 			return
 		}
 
-		tmpl.TypePost.ExecuteTemplate(w, "typepost", struct{
+		tmpl.Execute(w, "typepost", struct{
 				Post post.Post
 				Id int}{pst, id})
 	case "POST" :
@@ -173,7 +187,7 @@ PostTest(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch r.Method {
 	case "GET" :
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
-		tmpl.PostTest.ExecuteTemplate(w, "posttest", nil)
+		tmpl.Execute(w, "posttest", nil)
 	case "POST" :
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		fmt.Fprintf(w, "Method: %s\n", r.Method)

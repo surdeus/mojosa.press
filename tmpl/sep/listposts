@@ -1,0 +1,9 @@
+
+{{define "title"}}
+	Posts - {{.Page}}
+{{end}}
+
+{{define "content"}}
+{{end}}
+
+{{template "master" .}}
