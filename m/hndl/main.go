@@ -28,6 +28,7 @@ type FuncDefine struct {
 }
 
 var(
+	PageSize int = 10
 	Defs = []FuncDefine {
 		{urlpath.RootPrefix, "^$", Root},
 		{urlpath.ViewPostPrefix, "^[0-9]*$", ViewPost},
@@ -85,8 +86,8 @@ func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch(r.Method){
 	case "GET" :
 		pageId, _ := strconv.Atoi(a.p)
-		firstId := pageId*30 + 1
-		lastId := pageId*30 + 30 + 1
+		firstId := pageId*PageSize + 1
+		lastId := pageId*PageSize + PageSize
 
 		lastId = clamp(0, lastId, tempconfig.TmpCfg.LastPostId)
 

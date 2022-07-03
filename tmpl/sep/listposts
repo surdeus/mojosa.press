@@ -10,6 +10,13 @@
 	<div class="desc">{{$a.Desc}}</div>
 	</section>
  {{end}}
+	<div class="page-btn-box">
+		{{if not (eq .Page 0)}}
+			<a class="prev" href="/lp/{{sum .Page -1}}">&lt</a>
+		{{end}}
+			<span class="cur">{{.Page}}</span>
+			<a class="next" href="/lp/{{sum .Page +1}}">&gt</a>
+	</div>
 {{end}}
 
 {{template "master" .}}
