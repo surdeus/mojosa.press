@@ -137,7 +137,7 @@ func TypePost(w http.ResponseWriter, r *http.Request, a HndlArg) {
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
 		if a.p == "" {
-			tmpl.Execute(w, "typepost", struct{Post post.Post}{post.Post{}})
+			tmpl.Execute(w, "typepost", struct{}{})
 			return
 		}
 

@@ -1,3 +1,4 @@
+<link rel="icon" type="image/x-icon" href="/s/img/favicon.svg">
 <link rel="stylesheet" type="text/css" href="/s/style/master.css">
 <meta charset="utf-8">
-<title>mojosa.press - {{template "title" .}}</title>
+<title>{{template "title" .}}</title>
