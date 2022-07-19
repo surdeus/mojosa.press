@@ -15,10 +15,12 @@ func Preprocess(p post.Post) post.PostHTML {
 	pret.Desc = template.HTML(string(sanitize.Sanitize(buf)))
 
 	buf = md.Process([]byte(p.Title))
+	pret.WebTitle = string(sanitize.Sanitize([]byte(p.Title)))
 	pret.Title = template.HTML(string(sanitize.Sanitize(buf)))
 
 	buf = md.Process([]byte(p.Content))
 	pret.Content = template.HTML(string(sanitize.Sanitize(buf)))
+
 
 	return pret
 }

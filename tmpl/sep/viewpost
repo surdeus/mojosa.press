@@ -1,6 +1,6 @@
 
 {{define "title"}}
-	{{.Post.Title}}
+	{{.Post.WebTitle}}
 {{end}}
 
 {{define "content"}}

@@ -21,6 +21,7 @@ type Post struct {
 
 type PostHTML struct {
 	Content, Title, Desc template.HTML
+	WebTitle string
 }
 
 func
