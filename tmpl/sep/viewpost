@@ -9,7 +9,7 @@
 		<span class="char-btn">[<a href=/tp/{{.Id}}>✐</a>]</span>
 	  {{end}}
 	  <article>
-	    {{.HTMLContent}}
+	    {{.Post.Content}}
 	  </article>
   </div>
 {{end}}

@@ -6,7 +6,7 @@ import(
 	"encoding/json"
 	"github.com/k1574/mojosa.press/m/path"
 	"github.com/k1574/mojosa.press/m/tempconfig"
-	//"html/template"
+	"html/template"
 	//"fmt"
 	"errors"
 	"golang.org/x/crypto/bcrypt"
@@ -17,6 +17,10 @@ type Post struct {
 	Title string
 	Desc string
 	Hash string
+}
+
+type PostHTML struct {
+	Content, Title, Desc template.HTML
 }
 
 func

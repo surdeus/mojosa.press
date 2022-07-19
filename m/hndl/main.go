@@ -1,17 +1,16 @@
 package hndl
 
 import(
-	"html/template"
+	//"html/template"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strconv"
 	"github.com/k1574/mojosa.press/m/urlpath"
 	"github.com/k1574/mojosa.press/m/post"
-	"github.com/k1574/mojosa.press/m/sanitize"
-	"github.com/k1574/mojosa.press/m/md"
 	"github.com/k1574/mojosa.press/m/tmpl"
 	"github.com/k1574/mojosa.press/m/tempconfig"
+	"github.com/k1574/mojosa.press/m/pp"
 	//"io/ioutil"
 	"fmt"
 )
@@ -85,6 +84,7 @@ func Root(w http.ResponseWriter, r *http.Request, a HndlArg) {
 func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch(r.Method){
 	case "GET" :
+		var htmlPosts []post.PostHTML
 		pageId, _ := strconv.Atoi(a.p)
 		firstId := pageId*PageSize + 1
 		lastId := pageId*PageSize + PageSize
@@ -97,12 +97,16 @@ func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 			return
 		}
 
+		for _, v := range posts {
+			htmlPosts = append(htmlPosts, pp.Preprocess(v))
+		}
+
 		tmpl.Execute(w, "listposts", struct{
-			Posts []post.Post
+			Posts []post.PostHTML
 			Page int
 			FirstId int
 			LastId int
-			}{ posts, pageId, firstId, lastId})
+			}{ htmlPosts, pageId, firstId, lastId})
 	case "POST" :
 		http.NotFound(w, r)
 		return
@@ -119,14 +123,10 @@ func ViewPost(w http.ResponseWriter, r *http.Request, a HndlArg){
 
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 
-	buf := md.Process([]byte(pst.Content))
-	pst.Content = string(sanitize.Sanitize(buf))
-
 	tmpl.Execute(w, "viewpost", struct{
 			Id string
-			Post post.Post
-			HTMLContent template.HTML
-		}{a.p, pst, template.HTML(pst.Content)})
+			Post post.PostHTML
+		}{a.p, pp.Preprocess(pst)})
 }
 
 /* Both edit and write new. */
