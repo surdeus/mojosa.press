@@ -49,6 +49,7 @@ func MustParse(t string) *template.Template {
 		Funcs(template.FuncMap{
 			"hasField" : hasField,
 			"sum" : sum,
+			"neg" : neg,
 		}).ParseFiles(lfs...)
 	if err != nil {
 		panic(err)
@@ -73,3 +74,8 @@ func
 sum(a, b int) int {
 	return a + b
 }
+
+func neg(a int) int {
+	return -a
+}
+

@@ -1,6 +1,6 @@
 {{define "title"}}
 	{{if hasField . "Post"}}
-		Edit {{.Post.WebTitle}}
+		Edit {{.Post.Title}}
 	{{end}}
 	{{if not (hasField . "Post")}}
 		Type new

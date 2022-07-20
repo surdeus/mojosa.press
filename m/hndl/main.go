@@ -13,6 +13,7 @@ import(
 	"github.com/k1574/mojosa.press/m/pp"
 	//"io/ioutil"
 	"fmt"
+	"reflect"
 )
 
 type HndlArg struct {
@@ -81,15 +82,26 @@ func Root(w http.ResponseWriter, r *http.Request, a HndlArg) {
 		http.StatusFound)
 }
 
+
+func ReverseSlice(s interface{}) {
+	size := reflect.ValueOf(s).Len()
+	swap := reflect.Swapper(s)
+	for i, j := 0, size-1; i < j; i, j = i+1, j-1 {
+		swap(i, j)
+	}
+}
+
 func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 	switch(r.Method){
 	case "GET" :
-		var htmlPosts []post.PostHTML
+		var htmlPosts []pp.PostHTML
+		lpId := tempconfig.TmpCfg.LastPostId
 		pageId, _ := strconv.Atoi(a.p)
-		firstId := pageId*PageSize + 1
-		lastId := pageId*PageSize + PageSize
+		firstId := lpId - (pageId+1)*PageSize + 1
+		lastId := firstId + PageSize + 1
 
-		lastId = clamp(0, lastId, tempconfig.TmpCfg.LastPostId)
+		firstId = clamp(1, firstId, lpId)
+		lastId = clamp(1, lastId, lpId)
 
 		posts, err := post.GetList(firstId, lastId)
 		if err != nil {
@@ -97,12 +109,14 @@ func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 			return
 		}
 
-		for _, v := range posts {
-			htmlPosts = append(htmlPosts, pp.Preprocess(v))
+		ReverseSlice(posts)
+
+		for i, v := range posts {
+			htmlPosts = append(htmlPosts, pp.Preprocess(v, lastId-i))
 		}
 
 		tmpl.Execute(w, "listposts", struct{
-			Posts []post.PostHTML
+			Posts []pp.PostHTML
 			Page int
 			FirstId int
 			LastId int
@@ -125,8 +139,8 @@ func ViewPost(w http.ResponseWriter, r *http.Request, a HndlArg){
 
 	tmpl.Execute(w, "viewpost", struct{
 			Id string
-			Post post.PostHTML
-		}{a.p, pp.Preprocess(pst)})
+			Post pp.PostHTML
+		}{a.p, pp.Preprocess(pst, id)})
 }
 
 /* Both edit and write new. */
