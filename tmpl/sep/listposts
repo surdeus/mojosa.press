@@ -12,10 +12,14 @@
  {{end}}
 	<div class="page-btn-box">
 		{{if not (eq .Page 0)}}
-			<a class="prev" href="/lp/{{sum .Page -1}}">&lt</a>
+			<span class="char-btn">
+			<a class="prev" href="/lp/{{sum .Page -1}}">[&lt]</a>
+			</span>
 		{{end}}
 			<span class="cur">{{.Page}}</span>
-			<a class="next" href="/lp/{{sum .Page +1}}">&gt</a>
+			<span class="char-btn">
+			<a class="next" href="/lp/{{sum .Page +1}}">[&gt]</a>
+			</span>
 	</div>
 {{end}}
 
