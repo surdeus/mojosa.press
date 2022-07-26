@@ -6,7 +6,7 @@
 {{define "content"}}
  {{range $i, $a := .Posts}}
 	<section class="post-entry">
-	<h2><a href="/vp/{{$a.Id}}">{{$a.Title}}</a></h2>
+	<h2><a href="/vp/{{$a.Id}}">{{$a.WebTitle}}</a></h2>
 	<div class="desc">{{$a.Desc}}</div>
 	</section>
  {{end}}
