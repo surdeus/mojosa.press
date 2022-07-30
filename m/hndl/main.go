@@ -28,7 +28,7 @@ type FuncDefine struct {
 }
 
 var(
-	PageSize int = 10
+	PageSize int = 15
 	Defs = []FuncDefine {
 		{urlpath.RootPrefix, "^$", Root},
 		{urlpath.ViewPostPrefix, "^[0-9]*$", ViewPost},
@@ -97,8 +97,13 @@ func ListPosts(w http.ResponseWriter, r *http.Request, a HndlArg) {
 		var htmlPosts []pp.PostHTML
 		lpId := tempconfig.TmpCfg.LastPostId
 		pageId, _ := strconv.Atoi(a.p)
-		firstId := lpId - (pageId+1)*PageSize + 1
-		lastId := firstId + PageSize + 1
+		firstId := lpId - (pageId+1)*(PageSize) + 1
+		lastId := firstId + PageSize - 1
+
+		if firstId <= -PageSize  {
+			http.NotFound(w, r)
+			return
+		}
 
 		firstId = clamp(1, firstId, lpId)
 		lastId = clamp(1, lastId, lpId)
