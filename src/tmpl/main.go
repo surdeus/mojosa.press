@@ -1,7 +1,7 @@
 package tmpl
 
 import(
-	"github.com/k1574/mojosa.press/m/path"
+	"github.com/surdeus/mojosa.press/src/path"
 	"html/template"
 	"io/ioutil"
 	"io"

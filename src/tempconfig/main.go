@@ -4,7 +4,7 @@ import(
 	"encoding/json"
 	"os"
 	"io/fs"
-	"github.com/k1574/mojosa.press/m/path"
+	"github.com/surdeus/mojosa.press/src/path"
 )
 
 type TempConfig struct {

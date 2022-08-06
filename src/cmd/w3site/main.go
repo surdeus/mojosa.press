@@ -5,11 +5,11 @@ import(
 	"flag"
 	"log"
 	"net/http"
-	"github.com/k1574/mojosa.press/m/hndl"
-	"github.com/k1574/mojosa.press/m/tmpl"
-	"github.com/k1574/mojosa.press/m/path"
-	"github.com/k1574/mojosa.press/m/urlpath"
-	"github.com/k1574/mojosa.press/m/tempconfig"
+	"github.com/surdeus/mojosa.press/src/hndl"
+	"github.com/surdeus/mojosa.press/src/tmpl"
+	"github.com/surdeus/mojosa.press/src/path"
+	"github.com/surdeus/mojosa.press/src/urlpath"
+	"github.com/surdeus/mojosa.press/src/tempconfig"
 	"regexp"
 )
 

@@ -1,9 +1,9 @@
 package pp
 
 import (
-	"github.com/k1574/mojosa.press/m/md"
-	"github.com/k1574/mojosa.press/m/sanitize"
-	"github.com/k1574/mojosa.press/m/post"
+	"github.com/surdeus/mojosa.press/src/md"
+	"github.com/surdeus/mojosa.press/src/sanitize"
+	"github.com/surdeus/mojosa.press/src/post"
 	"html/template"
 	"strconv"
 )
